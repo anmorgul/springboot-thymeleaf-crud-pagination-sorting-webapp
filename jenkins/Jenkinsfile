@@ -27,31 +27,31 @@ pipeline {
                 echo "ToDo send tests to sonar"
             }
         } 
-        stage("docker build test") {
-            steps {
-                script {
-                    sh "cp ./jenkins/Dockerfile ./Dockerfile"
-                    sh "docker build  -t springio/gs-spring-boot-docker ."
-                }
-            }
-        }
-        // stage("docker build api and push to ecr") {
-        // 	steps {
+        // stage("docker build test") {
+        //     steps {
         //         script {
-        //             sh 'docker image prune -a -f'
         //             sh "cp ./jenkins/Dockerfile ./Dockerfile"
-        //             TAG = sh (
-        //                 script: 'git log -1 --pretty=%h',
-        //                 returnStdout: true
-        //             ).trim()
-        //             docker.withRegistry(
-        //                 'https://934086672967.dkr.ecr.eu-central-1.amazonaws.com',
-        //                 'ecr:eu-central-1:aws_creds') {
-        //                     def myImage = docker.build('java-ecr')
-        //                 myImage.push(TAG)
-        //             }
+        //             sh "docker build  -t springio/gs-spring-boot-docker ."
         //         }
         //     }
         // }
+        stage("docker build api and push to ecr") {
+        	steps {
+                script {
+                    sh 'docker image prune -a -f'
+                    sh "cp ./jenkins/Dockerfile ./Dockerfile"
+                    TAG = sh (
+                        script: 'git log -1 --pretty=%h',
+                        returnStdout: true
+                    ).trim()
+                    docker.withRegistry(
+                        'https://934086672967.dkr.ecr.eu-central-1.amazonaws.com',
+                        'ecr:eu-central-1:aws_creds') {
+                            def myImage = docker.build('java')
+                        myImage.push(TAG)
+                    }
+                }
+            }
+        }
     }
 }
