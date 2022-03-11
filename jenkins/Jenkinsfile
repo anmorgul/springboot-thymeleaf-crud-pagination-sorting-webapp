@@ -10,6 +10,11 @@ pipeline {
                 }
             }
         }
+        stage("change db url, user,pass") {
+            steps {
+                echo "ToDo change db url, user,pass"
+            }
+        }
         stage("mvn clean") {
             steps {
                 script {
