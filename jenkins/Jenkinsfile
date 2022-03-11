@@ -22,6 +22,11 @@ pipeline {
                 }
             }
         }
+        stage("sonar") {
+            steps {
+                echo "ToDo send tests to sonar"
+            }
+        } 
         stage("docker build test") {
             steps {
                 script {
